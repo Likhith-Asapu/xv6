@@ -84,6 +84,7 @@ argstr(int n, char *buf, int max)
 extern uint64 sys_fork(void);
 extern uint64 sys_exit(void);
 extern uint64 sys_wait(void);
+extern uint64 sys_waitx(void);	/* Modified for A4: Added waitx */
 extern uint64 sys_pipe(void);
 extern uint64 sys_read(void);
 extern uint64 sys_kill(void);
@@ -129,6 +130,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace, /* Modified for A4: Added trace */
+[SYS_waitx]   sys_waitx, /* Modified for A4: Added waitx */
 };
 
 char *syscallnames[] = {
@@ -153,7 +155,8 @@ char *syscallnames[] = {
 [SYS_link]    "link",
 [SYS_mkdir]   "mkdir",
 [SYS_close]   "close",
-[SYS_trace]   "trace", 
+[SYS_trace]   "trace",
+[SYS_waitx]   "waitx", /* Modified for A4: Added waitx */ 
 };
 
 static int syscallnum[] = {

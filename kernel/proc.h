@@ -106,5 +106,11 @@ struct proc {
   char name[16];               // Process name (debugging)
 
   int mask; /* Modified for A4: Added mask  */
+  
+  uint rtime;
+  uint ctime;	/* Modified for A4: Added waitx variables */
+  uint etime;
+  
+  uint64 time_created; /* Modified for A4: Recording time created  */
 
 };

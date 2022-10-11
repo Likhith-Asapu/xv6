@@ -110,3 +110,8 @@ trace:
  li a7, SYS_trace
  ecall
  ret
+.global waitx
+waitx:
+ li a7, SYS_waitx
+ ecall
+ ret
