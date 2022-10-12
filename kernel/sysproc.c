@@ -65,6 +65,24 @@ sys_settickets(void)
   return 0; 
 }
 
+uint64
+sys_setpriority()
+{
+  int pid, priority;
+  int arg_num[2] = {0, 1};
+
+  if(argint(arg_num[0], &priority) < 0)
+  {
+    return -1;
+  }
+  if(argint(arg_num[1], &pid) < 0)
+  {
+    return -1;
+  }
+   
+  return setpriority(priority, pid);
+}
+
 
 uint64
 sys_exit(void)

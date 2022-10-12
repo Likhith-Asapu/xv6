@@ -152,6 +152,11 @@ found:
   p->ctime = ticks;
   p->alarm_on = 0;
   p->cur_ticks = 0;
+  p->runtime = 0;
+  p->starttime = 0;
+  p->sleeptime = 0;
+  p->runcount = 0;
+  p->priority = 60;
   p->handlerpermission = 1;
   if(p->parent != 0){
     p->tickets = p->parent->tickets;
@@ -508,6 +513,30 @@ waitx(uint64 addr, uint* wtime, uint* rtime)
   }
 }
 
+int max(int a, int b){
+
+  if(a > b)
+  {
+    return a;
+  }
+  else
+  {
+    return b;
+  }
+}
+
+int min(int a, int b){
+
+  if(a < b)
+  {
+    return a;
+  }
+  else
+  {
+    return b;
+  }  
+}
+
 void
 update_time()
 {
@@ -659,6 +688,92 @@ scheduler(void)
 
 #endif
 
+#ifdef PBS
+
+  struct proc *p;
+  struct cpu *c = mycpu();
+  c->proc = 0;
+
+  for(;;){
+    // Avoid deadlock by ensuring that devices can interrupt.
+    intr_on();
+
+    struct proc* high_priority_proc;
+    high_priority_proc = 0;
+    int dynamic_priority = 101;     // Lower dynamic_priority value => higher preference in scheduling
+
+    for(p = proc; p < &proc[NPROC]; p++) {
+
+      acquire(&p->lock);
+
+      int nice;
+
+      if(p->runtime + p->sleeptime > 0){
+        nice = p->sleeptime * 10;
+        nice = nice / (p->sleeptime + p->runtime);
+      }
+      else{
+        nice = 5;               // Default value of nice;
+      }
+
+      int current_dp; // current dynamic priority
+      current_dp = max(0, min(p->priority - nice + 5, 100));
+
+      if(p->state == RUNNABLE){
+
+        int dp_check = 0;
+        int check_1 = 0, check_2 = 0;
+        
+        if(dynamic_priority == current_dp){
+          dp_check = 1;
+        }
+
+        // If 2 processes have same dynamic priority, we check for number of times the process has been scheduled
+        if(dp_check && p->runcount < high_priority_proc->runcount){
+          check_1 = 1;
+        }
+
+        // If 2 processes have same dynamic priority and number of runs
+        // we check for creation time
+        if(dp_check && high_priority_proc->runcount == p->runcount && p->time_created < high_priority_proc->time_created){
+          check_2 = 1;
+        }
+        
+        if(high_priority_proc == 0 || current_dp > dynamic_priority || (dp_check && check_1) || check_2){
+          
+          if(high_priority_proc != 0){
+            release(&high_priority_proc->lock);
+          }
+
+          dynamic_priority = current_dp;
+          high_priority_proc = p;
+          continue;
+
+        }
+      }
+      
+      release(&p->lock);
+
+    }
+
+    if(high_priority_proc != 0){
+
+      high_priority_proc->state = RUNNING;
+      high_priority_proc->starttime = ticks;
+      high_priority_proc->runtime = 0;
+      high_priority_proc->sleeptime = 0;
+      high_priority_proc->runcount += 1;
+
+      c->proc = high_priority_proc;
+      swtch(&c->context, &high_priority_proc->context);
+
+      c->proc = 0;
+      release(&high_priority_proc->lock);
+
+    }
+  }
+
+#endif
 
 }
 
@@ -871,4 +986,41 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+int
+setpriority(int new_priority, int pid)
+{
+  int prev_priority;
+  prev_priority = 0;
+
+  struct proc* p;
+  for(p = proc; p < &proc[NPROC]; p++)
+  {
+    acquire(&p->lock);
+
+    if(p->pid == pid)
+    {
+      prev_priority = p->priority;
+      p->priority = new_priority;
+
+      p->sleeptime = 0;
+      p->runtime = 0;
+
+      int reschedule = 0;
+
+      if(new_priority < prev_priority){
+        reschedule = 1;
+      }
+
+      release(&p->lock);
+      if(reschedule){
+        yield();
+      }
+
+      break;
+    }
+    release(&p->lock);
+  }
+  return prev_priority;
 }

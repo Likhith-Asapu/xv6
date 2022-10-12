@@ -41,3 +41,4 @@ entry("waitx");
 entry("sigreturn");
 entry("sigalarm");
 entry("settickets");
+entry("setpriority");

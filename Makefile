@@ -50,7 +50,7 @@ endif
 
 #  Modified for A4: Added Macro for scheduler
 ifndef SCHEDULER
-SCHEDULER := LOTTERY
+SCHEDULER := RR
 endif
 
 QEMU = qemu-system-riscv64
@@ -142,6 +142,7 @@ UPROGS=\
 	$U/_schedulertest\
 	$U/_time\
 	$U/_alarmtest\
+	$U/_setpriority\
 	# Modified for A4: added strace user program
 
 fs.img: mkfs/mkfs README $(UPROGS)

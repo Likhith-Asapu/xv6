@@ -113,7 +113,6 @@ struct proc {
   
   uint64 time_created; /* Modified for A4: Recording time created  */
 
-  /* Modified for A4: Recording time created  */
   uint64 handler;
   int ticks;
   int cur_ticks;
@@ -123,4 +122,10 @@ struct proc {
   uint64 a2;
   int handlerpermission;
   int tickets;
+  
+  uint64 runtime;
+  uint64 starttime;
+  uint64 sleeptime;
+  uint64 runcount;
+  uint64 priority;
 };

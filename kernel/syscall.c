@@ -108,6 +108,7 @@ extern uint64 sys_trace(void); /* Modified for A4: Added trace */
 extern uint64 sys_sigalarm(void); /* Modified for A4: Added trace */
 extern uint64 sys_sigreturn(void); /* Modified for A4: Added trace */
 extern uint64 sys_settickets(void);
+extern uint64 sys_setpriority(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -138,6 +139,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_sigalarm] sys_sigalarm,
 [SYS_sigreturn] sys_sigreturn,
 [SYS_settickets] sys_settickets,
+[SYS_setpriority] sys_setpriority,
 };
 
 char *syscallnames[] = {
@@ -167,6 +169,7 @@ char *syscallnames[] = {
 [SYS_sigalarm] "sigalarm",/* Modified for A4: Added waitx */
 [SYS_sigreturn] "sigreturn",/* Modified for A4: Added waitx */
 [SYS_settickets] "settickets",
+[SYS_setpriority] "setpriority",
 };
 
 static int syscallnum[] = {
@@ -195,6 +198,7 @@ static int syscallnum[] = {
     [SYS_sigalarm] 2,
     [SYS_sigreturn] 0,
     [SYS_settickets] 1,
+    [SYS_setpriority] 1,
 };
 
 void
