@@ -20,6 +20,38 @@ sys_trace(void)
 	return 0;
 }	/* Modified for A4: Added trace */
 
+/* Modified for A4: Added trace */
+uint64 sys_sigalarm(void)
+{
+  uint64 addr;
+  int ticks;
+  if(argint(0, &ticks) < 0)
+    return -1;
+  if(argaddr(1, &addr) < 0)
+    return -1;
+
+  myproc()->ticks = ticks;
+  myproc()->handler = addr;
+  myproc()->alarm_on = 1;
+  //myproc()->a1 = myproc()->trapframe->a0;
+  //myproc()->a2 = myproc()->trapframe->a1;
+
+  return 0;
+}
+
+/* Modified for A4: Added trace */
+uint64 sys_sigreturn(void)
+{
+  struct proc *p = myproc();
+  memmove(p->trapframe, p->alarm_tf, PGSIZE);
+  //myproc()->trapframe->a0 = myproc()->a1;
+  //myproc()->trapframe->a1 = myproc()->a2;
+  kfree(p->alarm_tf);
+  p->cur_ticks = 0;
+  p->handlerpermission = 1;
+  return myproc()->trapframe->a0;
+}
+
 uint64
 sys_exit(void)
 {

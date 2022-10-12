@@ -63,10 +63,11 @@ argint(int n, int *ip)
 // Retrieve an argument as a pointer.
 // Doesn't check for legality, since
 // copyin/copyout will do that.
-void
+int
 argaddr(int n, uint64 *ip)
 {
   *ip = argraw(n);
+  return 0;
 }
 
 // Fetch the nth word-sized system call argument as a null-terminated string.
@@ -104,6 +105,9 @@ extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_trace(void); /* Modified for A4: Added trace */
+extern uint64 sys_sigalarm(void); /* Modified for A4: Added trace */
+extern uint64 sys_sigreturn(void); /* Modified for A4: Added trace */
+
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -131,6 +135,8 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace, /* Modified for A4: Added trace */
 [SYS_waitx]   sys_waitx, /* Modified for A4: Added waitx */
+[SYS_sigalarm] sys_sigalarm,
+[SYS_sigreturn] sys_sigreturn,
 };
 
 char *syscallnames[] = {
@@ -157,6 +163,8 @@ char *syscallnames[] = {
 [SYS_close]   "close",
 [SYS_trace]   "trace",
 [SYS_waitx]   "waitx", /* Modified for A4: Added waitx */ 
+[SYS_sigalarm] "sigalarm",/* Modified for A4: Added waitx */
+[SYS_sigreturn] "sigreturn",/* Modified for A4: Added waitx */
 };
 
 static int syscallnum[] = {
@@ -182,6 +190,8 @@ static int syscallnum[] = {
     [SYS_mkdir] 1,
     [SYS_close] 1,
     [SYS_trace] 1,
+    [SYS_sigalarm] 2,
+    [SYS_sigreturn] 0,
 };
 
 void

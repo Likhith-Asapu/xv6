@@ -113,4 +113,14 @@ struct proc {
   
   uint64 time_created; /* Modified for A4: Recording time created  */
 
+  /* Modified for A4: Recording time created  */
+  uint64 handler;
+  int ticks;
+  int cur_ticks;
+  struct trapframe *alarm_tf; // cache the trapframe when timer fires
+  int alarm_on;
+  uint64 a1;
+  uint64 a2;
+  int handlerpermission;
+  
 };

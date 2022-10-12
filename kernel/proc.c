@@ -150,7 +150,9 @@ found:
   p->rtime = 0;
   p->etime = 0;
   p->ctime = ticks;
-
+  p->alarm_on = 0;
+  p->cur_ticks = 0;
+  p->handlerpermission = 1;
   return p;
 }
 
@@ -174,6 +176,14 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
+  /*
+  p->alarm_on = 0;
+  if(p->alarm_tf)
+    kfree((void*)p->alarm_tf);
+  p->ticks = 0;
+  p->cur_ticks = 0;
+  p->handler = 0;
+  */
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -573,7 +583,7 @@ scheduler(void)
       }
       release(&p->lock);
     }
-
+    
     if(first_proc != 0){
       
       first_proc->state = RUNNING;
