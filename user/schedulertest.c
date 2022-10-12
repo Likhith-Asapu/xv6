@@ -12,23 +12,22 @@ int main() {
   int wtime, rtime;
   int twtime=0, trtime=0;
   for(n=0; n < NFORK;n++) {
-      pid = fork();
-      
-      if(n == 0)
+    if(n == 4)
         settickets(400);
       else
         settickets(1);
+      pid = fork();
       if (pid < 0)
           break;
       if (pid == 0) {
         
-#ifndef FCFS
+#ifndef LOTTERY
           if (n < IO) {
             sleep(200); // IO bound processes
           } else {
 #endif
             for (volatile int i = 0; i < 1000000000; i++) {} // CPU bound process 
-#ifndef FCFS
+#ifndef LOTTERY
           }
 #endif
           printf("Process %d finished\n", n);

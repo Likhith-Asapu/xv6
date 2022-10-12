@@ -158,12 +158,9 @@ found:
   p->runcount = 0;
   p->priority = 60;
   p->handlerpermission = 1;
-  if(p->parent != 0){
-    p->tickets = p->parent->tickets;
-  }
-  else{
-    p->tickets = 1;
-  }
+  
+  p->tickets = 1;
+  
   return p;
 }
 
@@ -345,6 +342,7 @@ fork(void)
 
   acquire(&wait_lock);
   np->parent = p;
+  np->tickets = np->parent->tickets;
   release(&wait_lock);
 
   acquire(&np->lock);
