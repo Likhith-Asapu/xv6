@@ -13,9 +13,15 @@ int main() {
   int twtime=0, trtime=0;
   for(n=0; n < NFORK;n++) {
       pid = fork();
+      
+      if(n == 0)
+        settickets(400);
+      else
+        settickets(1);
       if (pid < 0)
           break;
       if (pid == 0) {
+        
 #ifndef FCFS
           if (n < IO) {
             sleep(200); // IO bound processes

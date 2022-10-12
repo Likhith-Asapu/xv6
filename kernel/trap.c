@@ -89,7 +89,7 @@ usertrap(void)
       }
     }
 
-#if defined RR || defined MLFQ
+#if defined RR || defined MLFQ || defined LOTTERY
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2)
     yield();
@@ -166,7 +166,7 @@ kerneltrap()
     panic("kerneltrap");
   }
   
-#if defined RR || defined MLFQ
+#if defined RR || defined MLFQ || defined LOTTERY
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2 && myproc() != 0 && myproc()->state == RUNNING)

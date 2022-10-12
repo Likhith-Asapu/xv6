@@ -50,7 +50,7 @@ endif
 
 #  Modified for A4: Added Macro for scheduler
 ifndef SCHEDULER
-SCHEDULER := RR
+SCHEDULER := LOTTERY
 endif
 
 QEMU = qemu-system-riscv64

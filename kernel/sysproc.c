@@ -21,7 +21,8 @@ sys_trace(void)
 }	/* Modified for A4: Added trace */
 
 /* Modified for A4: Added trace */
-uint64 sys_sigalarm(void)
+uint64 
+sys_sigalarm(void)
 {
   uint64 addr;
   int ticks;
@@ -40,7 +41,8 @@ uint64 sys_sigalarm(void)
 }
 
 /* Modified for A4: Added trace */
-uint64 sys_sigreturn(void)
+uint64 
+sys_sigreturn(void)
 {
   struct proc *p = myproc();
   memmove(p->trapframe, p->alarm_tf, PGSIZE);
@@ -51,6 +53,18 @@ uint64 sys_sigreturn(void)
   p->handlerpermission = 1;
   return myproc()->trapframe->a0;
 }
+
+uint64 
+sys_settickets(void)
+{
+  struct proc *p = myproc();
+  int tickets;
+  if(argint(0, &tickets) < 0)
+    return -1;
+  p->tickets = tickets;
+  return 0; 
+}
+
 
 uint64
 sys_exit(void)

@@ -26,6 +26,7 @@ int uptime(void);
 int trace(int); /* Modified for A4: Added trace System call */
 int sigalarm(int ticks, void (*handler)());
 int sigreturn(void);
+int settickets(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

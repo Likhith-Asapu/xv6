@@ -122,5 +122,5 @@ struct proc {
   uint64 a1;
   uint64 a2;
   int handlerpermission;
-  
+  int tickets;
 };

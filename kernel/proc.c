@@ -153,6 +153,12 @@ found:
   p->alarm_on = 0;
   p->cur_ticks = 0;
   p->handlerpermission = 1;
+  if(p->parent != 0){
+    p->tickets = p->parent->tickets;
+  }
+  else{
+    p->tickets = 1;
+  }
   return p;
 }
 
@@ -515,6 +521,19 @@ update_time()
   }
 }
 
+int randomnum(int min,int max)
+{
+  uint64 num = (uint64)ticks;
+  num = num ^ (num << 13);
+  num = num ^ (num >> 17);
+  num = num ^ (num << 5);
+
+  num = num % (max - min);
+  num = num + min;
+
+  return num;
+}
+
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
 // Scheduler never returns.  It loops, doing:
@@ -556,6 +575,49 @@ scheduler(void)
   
  #endif
 
+ #ifdef LOTTERY
+
+  struct proc *p;
+  struct cpu *c = mycpu();
+  c->proc = 0;
+
+  for(;;){
+
+    intr_on();
+
+    int totalticketval = 0;
+    for(p = proc; p < &proc[NPROC]; p++) {
+      if(p->state == RUNNABLE){
+        totalticketval += p->tickets;
+      }
+    }
+    int ticketval = randomnum(0,totalticketval);
+    for(p = proc; p < &proc[NPROC]; p++) {
+      acquire(&p->lock);
+
+      if(p->state == RUNNABLE) {
+        //printf("totalticketval - %d\n",totalticketval);
+        if(p->tickets > ticketval){
+          //printf("%d ------ \n",p->pid);
+          p->state = RUNNING;
+          c->proc = p;
+          swtch(&c->context, &p->context);
+
+          c->proc = 0;
+          release(&p->lock);
+          break;
+        }
+        else{
+          ticketval = ticketval - p->tickets; 
+        }
+      }
+  
+      release(&p->lock);
+    }
+  }
+
+#endif
+
  #ifdef FCFS
 
   struct proc *p;
@@ -583,7 +645,7 @@ scheduler(void)
       }
       release(&p->lock);
     }
-    
+
     if(first_proc != 0){
       
       first_proc->state = RUNNING;
@@ -596,6 +658,7 @@ scheduler(void)
   }
 
 #endif
+
 
 }
 
