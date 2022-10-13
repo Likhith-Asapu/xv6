@@ -128,4 +128,9 @@ struct proc {
   uint64 sleeptime;
   uint64 runcount;
   uint64 priority;
+
+  int tickcount;
+  int queue;
+  int waittickcount;
+  int queueposition;
 };

@@ -21,13 +21,13 @@ int main() {
           break;
       if (pid == 0) {
         
-#ifndef LOTTERY
+#ifndef MLFQ
           if (n < IO) {
             sleep(200); // IO bound processes
           } else {
 #endif
-            for (volatile int i = 0; i < 1000000000; i++) {} // CPU bound process 
-#ifndef LOTTERY
+            for (uint64 i = 0; i < 1000000000; i++) {} // CPU bound process 
+#ifndef MLFQ
           }
 #endif
           printf("Process %d finished\n", n);
