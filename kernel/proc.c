@@ -1142,29 +1142,20 @@ int either_copyin(void *dst, int user_src, uint64 src, uint64 len)
 // No lock to avoid wedging a stuck machine further.
 void procdump(void)
 {
-  static char *states[] = {
-      [UNUSED] "unused",
-      [USED] "used",
-      [SLEEPING] "sleep ",
-      [RUNNABLE] "runble",
-      [RUNNING] "run   ",
-      [ZOMBIE] "zombie"};
   struct proc *p;
-  char *state;
 
   printf("\n");
   for (p = proc; p < &proc[NPROC]; p++)
   {
     if (p->state == UNUSED)
       continue;
-    if (p->state >= 0 && p->state < NELEM(states) && states[p->state])
-      state = states[p->state];
-    else
-      state = "???";
-    printf("%d %s %s %d %d %d %d", p->pid, state, p->name, p->queue, p->tickcount, p->waittickcount, p->queueposition);
+    if(p->pid > 3){
+    printf("%d-%d", p->pid, p->queue);
+    //printf("#NN - %d %s %s %d %d %d %d", p->pid, state, p->name, p->queue, p->tickcount, p->waittickcount, p->queueposition);
     printf("\n");
+    }
   }
-  printf("%d %d %d %d %d\n", queueprocesscount[0], queueprocesscount[1], queueprocesscount[2], queueprocesscount[3], queueprocesscount[4]);
+  //printf("%d %d %d %d %d\n", queueprocesscount[0], queueprocesscount[1], queueprocesscount[2], queueprocesscount[3], queueprocesscount[4]);
 }
 
 int setpriority(int new_priority, int pid)

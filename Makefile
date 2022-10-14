@@ -50,7 +50,7 @@ endif
 
 #  Modified for A4: Added Macro for scheduler
 ifndef SCHEDULER
-SCHEDULER := FCFS
+SCHEDULER := MLFQ
 endif
 
 QEMU = qemu-system-riscv64
@@ -165,7 +165,7 @@ QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 	then echo "-gdb tcp::$(GDBPORT)"; \
 	else echo "-s -p $(GDBPORT)"; fi)
 ifndef CPUS
-CPUS := 2
+CPUS := 1
 endif
 
 QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 128M -smp $(CPUS) -nographic
