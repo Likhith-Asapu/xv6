@@ -767,37 +767,40 @@ void scheduler(void)
       if (p->state == RUNNABLE)
       {
 
-        int dp_check = 0;
-        int check_1 = 0, check_2 = 0;
+        //int check_1 = 0, check_2 = 0;
 
-        if (dynamic_priority == current_dp)
-        {
-          dp_check = 1;
-        }
-
-        // If 2 processes have same dynamic priority, we check for number of times the process has been scheduled
-        if (dp_check && p->runcount < high_priority_proc->runcount)
-        {
-          check_1 = 1;
-        }
-
-        // If 2 processes have same dynamic priority and number of runs
-        // we check for creation time
-        if (dp_check && high_priority_proc->runcount == p->runcount && p->time_created < high_priority_proc->time_created)
-        {
-          check_2 = 1;
-        }
-
-        if (high_priority_proc == 0 || current_dp > dynamic_priority || (dp_check && check_1) || check_2)
-        {
-
+        if(current_dp < dynamic_priority){
           if (high_priority_proc != 0)
           {
             release(&high_priority_proc->lock);
           }
-
-          dynamic_priority = current_dp;
           high_priority_proc = p;
+          dynamic_priority = current_dp;
+          continue;
+        }
+
+        // If 2 processes have same dynamic priority, we check for number of times the process has been scheduled
+        if (current_dp ==  dynamic_priority && p->runcount < high_priority_proc->runcount)
+        {
+          if (high_priority_proc != 0)
+          {
+            release(&high_priority_proc->lock);
+          }
+          high_priority_proc = p;
+          dynamic_priority = current_dp;
+          continue;
+        }
+
+        // If 2 processes have same dynamic priority and number of runs
+        // we check for creation time
+        if (current_dp ==  dynamic_priority && high_priority_proc->runcount == p->runcount && p->time_created < high_priority_proc->time_created)
+        {
+          if (high_priority_proc != 0)
+          {
+            release(&high_priority_proc->lock);
+          }
+          high_priority_proc = p;
+          dynamic_priority = current_dp;
           continue;
         }
       }
