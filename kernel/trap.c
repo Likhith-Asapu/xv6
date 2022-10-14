@@ -90,6 +90,15 @@ usertrap(void)
       }
     }
 
+if(which_dev == 2){
+    //procdump();
+    if(p->state == RUNNING)
+    {
+      p->runtime++;
+      // printf("pid: %d, runtime: %d\n", p->pid, p->runtime);
+    }
+  }
+
 #if defined RR || defined MLFQ || defined LOTTERY
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2){

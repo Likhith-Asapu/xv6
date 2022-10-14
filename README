@@ -1,21 +1,39 @@
-# Modified for Strace
+# PERFORMANCE COMPARISION BETWEEN VARIOUS SCHEDULING ALGORITHMS
 
-In /kernel modified:
-- proc.c
-- proc.h
-- syscall.c
-- syscall.h
-- sysproc.c
+## RR :
+Waiting time: 143
 
-In /user modified:
-- user.h
-- (ADDED) strace.c
-
-Modified Makefile to add strace user program
+Run time: 21
 
 ---
-# Modified for SIG
 
+## FCFS :
+Waiting time: 119
+
+Run time: 24
+
+---
+
+## LOTTERY :
+`(One process was assigned a large number of tickets, thus letting the scheduler favour it)`
+
+Waiting time: 134 
+
+Run time: 18
+
+---
+
+## PBS :
+Waiting time: 120
+
+Run time: 25
+
+---
+
+## MLFQ :
+Waiting time: 142
+
+Run time: 14
 
 -----------------------
 

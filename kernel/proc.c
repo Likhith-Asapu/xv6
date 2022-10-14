@@ -741,8 +741,8 @@ void scheduler(void)
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
 
-    struct proc *high_priority_proc;
-    high_priority_proc = 0;
+    struct proc *high_priority_proc=0;
+    // high_priority_proc = 0;
     int dynamic_priority = 101; // Lower dynamic_priority value => higher preference in scheduling
 
     for (p = proc; p < &proc[NPROC]; p++)
@@ -762,8 +762,7 @@ void scheduler(void)
         nice = 5; // Default value of nice;
       }
 
-      int current_dp; // current dynamic priority
-      current_dp = max(0, min(p->priority - nice + 5, 100));
+      int current_dp = max(0, min(p->priority - nice + 5, 100)); // current dynamic priority
 
       if (p->state == RUNNABLE)
       {
@@ -1029,6 +1028,7 @@ void sleep(void *chan, struct spinlock *lk)
   // Go to sleep.
   p->chan = chan;
   p->state = SLEEPING;
+  p->sleeptime = ticks;
 
   sched();
 
@@ -1054,6 +1054,7 @@ void wakeup(void *chan)
       if (p->state == SLEEPING && p->chan == chan)
       {
         p->state = RUNNABLE;
+        p->sleeptime=ticks-p->sleeptime;
       }
       release(&p->lock);
     }

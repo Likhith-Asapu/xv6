@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
     char *command[MAXARG];
-    printf("argv - %c\n", argv[0][0]);
+    // printf("argv - %c\n", argv[0][0]);
     if (argc < 3)
     {
         printf("Too few arguments passed to strace\n");
