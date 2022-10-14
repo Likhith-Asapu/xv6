@@ -118,8 +118,10 @@ struct proc {
   int cur_ticks;
   struct trapframe *alarm_tf; // cache the trapframe when timer fires
   int alarm_on;
+  /*
   uint64 a1;
   uint64 a2;
+  */
   int handlerpermission;
   int tickets;
   

@@ -21,13 +21,13 @@ int main() {
           break;
       if (pid == 0) {
         
-#ifndef MLFQ
+#ifndef FCFS
           if (n < IO) {
             sleep(200); // IO bound processes
           } else {
 #endif
             for (uint64 i = 0; i < 1000000000; i++) {} // CPU bound process 
-#ifndef MLFQ
+#ifndef FCFS
           }
 #endif
           printf("Process %d finished\n", n);

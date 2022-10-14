@@ -76,6 +76,7 @@ usertrap(void)
   if(killed(p))
     exit(-1);
 
+
   if (which_dev == 2 && p->alarm_on == 1 && p->handlerpermission == 1) {
       
       struct trapframe *tf = kalloc();
@@ -83,7 +84,7 @@ usertrap(void)
       p->alarm_tf = tf;
 
       p->cur_ticks++;
-      if (p->cur_ticks >= p->ticks){
+      if (p->cur_ticks % p->ticks == 0){
         p->trapframe->epc = p->handler;
         p->handlerpermission = 0;
       }

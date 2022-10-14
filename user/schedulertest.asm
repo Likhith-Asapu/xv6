@@ -54,7 +54,7 @@ int main() {
   44:	bff9                	j	22 <main+0x22>
   46:	3b9ad7b7          	lui	a5,0x3b9ad
   4a:	a0078793          	addi	a5,a5,-1536 # 3b9aca00 <base+0x3b9ab9f0>
-#ifndef MLFQ
+#ifndef FCFS
           if (n < IO) {
             sleep(200); // IO bound processes
           } else {
@@ -62,7 +62,7 @@ int main() {
             for (uint64 i = 0; i < 1000000000; i++) {} // CPU bound process 
   4e:	17fd                	addi	a5,a5,-1
   50:	fffd                	bnez	a5,4e <main+0x4e>
-#ifndef MLFQ
+#ifndef FCFS
           }
 #endif
           printf("Process %d finished\n", n);

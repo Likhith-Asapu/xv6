@@ -702,14 +702,13 @@ void scheduler(void)
       acquire(&p->lock);
       if (p->state == RUNNABLE)
       {
-        if (!first_proc || p->time_created < first_proc->time_created)
+        if(first_proc == 0){
+          first_proc = p;
+          continue;
+        }
+        else if (p->time_created < first_proc->time_created)
         {
-
-          if (first_proc != 0)
-          {
-            release(&first_proc->lock);
-          }
-
+          release(&first_proc->lock);
           first_proc = p;
           continue;
         }
@@ -934,7 +933,7 @@ void scheduler(void)
           p->waittickcount++;
           if (p->queue != 0)
           {
-            if (p->waittickcount >= 1000)
+            if (p->waittickcount >= 30)
             {
               queueprocesscount[p->queue]--;
               p->queue--;

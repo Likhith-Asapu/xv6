@@ -6,16 +6,15 @@
 #include "spinlock.h"
 #include "proc.h"
 
-int mask;
 
 uint64
 sys_trace(void)
 {
+  int mask;
 	if(argint(0, &mask) < 0)
 	{
 		return -1;
 	}
-	
   myproc()->mask = mask;
 	return 0;
 }	/* Modified for A4: Added trace */
@@ -24,15 +23,15 @@ sys_trace(void)
 uint64 
 sys_sigalarm(void)
 {
-  uint64 addr;
+  uint64 handleraddr;
   int ticks;
   if(argint(0, &ticks) < 0)
     return -1;
-  if(argaddr(1, &addr) < 0)
+  if(argaddr(1, &handleraddr) < 0)
     return -1;
 
   myproc()->ticks = ticks;
-  myproc()->handler = addr;
+  myproc()->handler = handleraddr;
   myproc()->alarm_on = 1;
   //myproc()->a1 = myproc()->trapframe->a0;
   //myproc()->a2 = myproc()->trapframe->a1;
@@ -49,7 +48,6 @@ sys_sigreturn(void)
   //myproc()->trapframe->a0 = myproc()->a1;
   //myproc()->trapframe->a1 = myproc()->a2;
   kfree(p->alarm_tf);
-  p->cur_ticks = 0;
   p->handlerpermission = 1;
   return myproc()->trapframe->a0;
 }
