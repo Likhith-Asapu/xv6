@@ -1,20 +1,24 @@
+This repository contains a modified version of the xv6 operating system where various additional system calls have been implemented.
+
+---
+
 # PERFORMANCE COMPARISION BETWEEN VARIOUS SCHEDULING ALGORITHMS
 
-## RR :
+#### RR :
 Waiting time: 143
 
 Run time: 21
 
 ---
 
-## FCFS :
+#### FCFS :
 Waiting time: 119
 
 Run time: 24
 
 ---
 
-## LOTTERY :
+#### LOTTERY :
 `(One process was assigned a large number of tickets, thus letting the scheduler favour it)`
 
 Waiting time: 134 
@@ -23,14 +27,14 @@ Run time: 18
 
 ---
 
-## PBS :
+#### PBS :
 Waiting time: 120
 
 Run time: 25
 
 ---
 
-## MLFQ :
+#### MLFQ :
 Waiting time: 142
 
 Run time: 14
