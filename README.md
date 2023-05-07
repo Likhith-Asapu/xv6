@@ -1,45 +1,29 @@
-This repository contains a modified version of the xv6 operating system where various additional system calls have been implemented.
+### This repository contains a modified version of the xv6 operating system where various additional system calls have been implemented.
+
+The system calls implemented were:
+
+- Trace
+- Sigalarm and Sigreturn
+
+Additionally, various scheduling algorigths were also implemented such as:
+
+- First Come First Serve (FCFS)
+- Priority Based Scheduling (PBS)
+- Multi Level Feedback Queue (MLFQ)
+- Lottery Based Scheduler
 
 ---
 
-# PERFORMANCE COMPARISION BETWEEN VARIOUS SCHEDULING ALGORITHMS
+##### PERFORMANCE COMPARISION BETWEEN VARIOUS SCHEDULING ALGORITHMS
 
-#### RR :
-Waiting time: 143
-
-Run time: 21
-
----
-
-#### FCFS :
-Waiting time: 119
-
-Run time: 24
+| Scheduler | Wait time | Run time |
+|-----------|-----------|----------|
+| FCFS      | 119       | 24       |
+| Lottery   | 134       | 18       |
+| PBS       | 120       | 25       |
+| MLFQ      | 142       | 14       |
 
 ---
-
-#### LOTTERY :
-`(One process was assigned a large number of tickets, thus letting the scheduler favour it)`
-
-Waiting time: 134 
-
-Run time: 18
-
----
-
-#### PBS :
-Waiting time: 120
-
-Run time: 25
-
----
-
-#### MLFQ :
-Waiting time: 142
-
-Run time: 14
-
------------------------
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
