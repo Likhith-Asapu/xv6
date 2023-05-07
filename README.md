@@ -5,7 +5,7 @@ The system calls implemented were:
 - Trace
 - Sigalarm and Sigreturn
 
-Additionally, various scheduling algorigths were also implemented such as:
+Additionally, various scheduling algorithms were also implemented such as:
 
 - First Come First Serve (FCFS)
 - Priority Based Scheduling (PBS)
